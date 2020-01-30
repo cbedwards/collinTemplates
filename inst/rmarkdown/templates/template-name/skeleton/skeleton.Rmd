@@ -32,6 +32,18 @@ doy_2md=function(i){
   ymd=as.Date(i-1, origin="2019-01-01")
   return(format(ymd, "%B %d"))
 }
+## example usage:
+# #generate 30 observations from day of year 40 to 150
+# doy=sample(40:150,30)
+# #generate gaussian counts with noise
+# count=exp(-(doy-100)^2/100)+(runif(30)-.5)*.1
+# plot(doy,count)
+# # now plot with day-month references
+# plot(doy,count, xaxt="n")
+# #Make sequence of days to label. Here, 5 days from day 40 to 150
+# at=round(seq(40,150, length=5))
+# axis(1,at=at, labels=doy_2md(at))
+
 
 
 ## Function for making figs with metadata. Note: need to update file path, script name
@@ -69,6 +81,12 @@ fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
 color.gradient <- function(x, colors=viridis(256), colsteps=100) {
   return( colorRampPalette(colors) (colsteps) [ findInterval(x, seq(min(x),max(x), length.out=colsteps)) ] )
 }
+## Example usage:
+#x=runif(100)
+#plot(x=x, y=1/x, pch=19,col=color.gradient(x),
+#     cex.lab=1.6, main="Example of color gradient")
+
+
 
 ## function for making semi-transparent colors
 t_col <- function(color, alpha = 1, name = NULL) {
@@ -85,9 +103,17 @@ t_col <- function(color, alpha = 1, name = NULL) {
   ## Save the color
   invisible(t.col)
 }
+## example usage:
+# library(plotrix)
+#plot(c(1,2),c(1,2),type='l')
+#red.t = t_col(color="red", alpha=.5)
+#draw.circle(x=1.5, y=1.5, radius=.2, col=red.t)
+
+
 
 ## Functions for making pair plots
 panel.hist <- function(x, ...){
+# histogram function
   usr <- par("usr"); on.exit(par(usr))
   par(usr = c(usr[1:2], 0, 1.5) )
   h <- hist(x, plot = FALSE, breaks=20)
@@ -100,6 +126,7 @@ panel.cor <- function(x, y,
                       prefix = "",
                       cex.cor,
                       ...){
+  # function to plot pairwise correlations
   usr <- par("usr"); on.exit(par(usr))
   par(usr = c(0, 1, 0, 1))
   r <- abs(cor(x, y, use="complete.obs"))
@@ -118,6 +145,7 @@ panel.cortest = function(x,y,
                          prefix="",
                          cex.cor,
                          ...){
+  #function to plot p value of correlations
   usr <- par("usr"); on.exit(par(usr))
   par(usr = c(0, 1, 0, 1))
   p <- signif(cor.test(x, y, use="complete.obs")$p.value,2)
@@ -128,13 +156,19 @@ panel.cortest = function(x,y,
   text(.5, .5, p, cex=cex.cor, col=col)
 
 }
-
 ## example usage:
+# x=runif(100)
+# dat=data.frame(x=x,y=x+.5+rnorm(100)*.1, z=x + rnorm(100))
 # pairs(dat,
 #       lower.panel=panel.cor,
 #       diag.panel=panel.hist)
+# pairs(dat,
+#     lower.panel=panel.cortest,
+#     diag.panel=panel.hist,
+#     upper.panel=panel.cor)
 
 ## Function for taking a vector of strings in R and displaying it as bullets in Rmarkdown
+## Note that the chunk needs to be given the argument of results='asis'
 printer=function(x){
 ## x needs to be a vector of strings.
   com=as.character(x)
@@ -142,6 +176,10 @@ printer=function(x){
   com=gsub("\n","",com)
   cat(paste('-', com), sep = '\n') 
 }
+# example usage:
+# ```{r results='asis'}
+#    printer(1:3)
+# ```
 
 ```
 
