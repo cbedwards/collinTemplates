@@ -5,6 +5,7 @@ This is an R package to use my standard Rmarkdown template (which is subject to 
 Package can be installed using the devtools package
 
 install.packages("devtools")
+
 library("devtools")
 
 and then
