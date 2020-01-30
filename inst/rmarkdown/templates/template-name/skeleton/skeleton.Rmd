@@ -1,6 +1,6 @@
 ---
 title: "Untitled"
-author: "Collin Edwards"
+author: "Author Name"
 date: "1/30/2020"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
