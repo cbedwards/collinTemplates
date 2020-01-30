@@ -46,7 +46,7 @@ doy_2md=function(i){
 
 
 
-## Function for making figs with metadata. Note: need to update file path, script name
+## Function for making figs with metadata. Note: you will want to change figfold and scriptname default values to be appropriate for this document.
 fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
                    description, #vector of strings, each will be put in its own line of meta file
                    ##  Note: generating file is defined in the function, date and time is automatically added.
@@ -54,7 +54,9 @@ fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
                    width=12,
                    height=8,
                    units="in",
-                   res=300
+                   res=300,
+                   figfold="5_figs",
+                   scriptname="BCB_analysis_v1.0.Rmd"
                    ){
   #function to automate making a jpeg figure (can change code here to make png)
   #and also add meta text
@@ -63,19 +65,24 @@ fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
   ## save meta file
   cat(c(description,
       "",##easy way to add an extra line to separate description for basic data.
-      "from BCB_analysis_v1.0.Rmd",
+      paste("from",scriptname),
       as.character(Sys.time())),
     sep="\n",
-    file=here("5_figs", paste(filename,"_meta.txt", sep=""))
+    file=here(figfold, paste(filename,"_meta.txt", sep=""))
     )
   
   ## open jpeg device
-  jpeg(file=here("5_figs",paste(filename,".jpg", sep="")),
+  jpeg(file=here(figfold,paste(filename,".jpg", sep="")),
      width=width, 
      height=height, 
      units=units, 
      res=res)
 }
+## Example usage:
+# fig_starter(filename="testfig", description=c("This figure was made as an example.","We can add endless lines of description."))
+# plot(1:10,1:10, pch=1:10)
+# dev.off()
+## Note: in this case the example will not work for you unless you give it the correct location for "figfold" - the relative file path to the folder for your figures.
 
 ## Function for making color gradient in R
 color.gradient <- function(x, colors=viridis(256), colsteps=100) {
