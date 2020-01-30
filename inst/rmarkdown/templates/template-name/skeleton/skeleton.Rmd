@@ -17,9 +17,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Libraries
 
 ```{r}
-require(viridis) #package for colors
-require(here) #package for handling file paths easily
-require(beepr) #package for making sound to let me know things are done.
+library(viridis) #package for colors
+library(here) #package for handling file paths easily
+library(beepr) #package for making sound to let me know things are done.
 ```
 
 
