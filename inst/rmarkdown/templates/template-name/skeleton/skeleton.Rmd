@@ -188,6 +188,65 @@ printer=function(x){
 #    printer(1:3)
 # ```
 
+
+
+fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
+                     description, #vector of strings, each will be put in its own line of meta file
+                     ##  Note: generating file is defined in the function, date and time is automatically added.
+                     ##default figure info:
+                     width=12,
+                     height=8,
+                     units="in",
+                     res=300,
+                     figfold="5_figs",
+                     scriptname="BCB_analysis_v1.2.Rmd"
+){
+  #function to automate making a jpeg figure (can change code here to make png)
+  #and also add meta text
+  #NOTE: still have to use dev.off() at the end of plot-making
+  
+  ## save meta file
+  cat(c(description,
+        "",##easy way to add an extra line to separate description for basic data.
+        paste("from",scriptname),
+        as.character(Sys.time())),
+      sep="\n",
+      file=here(figfold, paste(filename,"_meta.txt", sep=""))
+  )
+  
+  ## open jpeg device
+  jpeg(file=here(figfold,paste(filename,".jpg", sep="")),
+       width=width, 
+       height=height, 
+       units=units, 
+       res=res)
+}
+
+gfig_saver=function(gfig, #object to be saved
+                    filename, #name of figure file to save as WITHOUT SUFFIX
+                    description, #vector of strings, each will be put in its own line of meta file
+                    ##  Note: generating file is defined in the function, date and time is automatically added.
+                    ##default figure info:
+                    width=12,
+                    height=8,
+                    units="in",
+                    figfold="5_figs",
+                    scriptname="BCB_analysis_v1.2.Rmd"
+){
+  ## save meta file
+  cat(c(description,
+        "",##easy way to add an extra line to separate description for basic data.
+        paste("from",scriptname),
+        as.character(Sys.time())),
+      sep="\n",
+      file=here(figfold, paste(filename,"_meta.txt", sep=""))
+  )
+  ggsave(filename=here(figfold, paste(filename,".jpg", sep="")),
+         plot=gfig,
+         device="jpeg",
+         width=width, height=height, units=units
+  )
+}
 ```
 
 ### Document-specific functions
