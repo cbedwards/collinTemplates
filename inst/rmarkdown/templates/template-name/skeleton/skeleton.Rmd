@@ -41,7 +41,7 @@ library(beepr) #package for making sound to let me know things are done. Not imp
 
 ## Function definitions
 
-### Standard Edwards' functions
+### Standard Edwards functions
 
 ```{r doy_2md}
 ## function for turning DOY to month-day for visualization
