@@ -12,6 +12,23 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+# Summary
+
+## Document purpose
+
+*What are we doing here?*
+
+## Updates
+
+*Did we change something recently that's important to note?*
+
+# Setup
+
+For the sake of repeatability, we set the seed here, arbitrarily choosing 123 as our seed. Commenting this code out will mean that each time the script is re-run, random numbers will be different.
+
+```{r}
+set.seed(123)
+```
 
 ## Libraries
 
@@ -24,9 +41,9 @@ library(beepr) #package for making sound to let me know things are done. Not imp
 
 ## Function definitions
 
-### Standard Collin functions
+### Standard Edwards' functions
 
-```{r}
+```{r doy_2md}
 ## function for turning DOY to month-day for visualization
 doy_2md=function(i){
   ymd=as.Date(i-1, origin="2019-01-01")
@@ -43,58 +60,21 @@ doy_2md=function(i){
 # #Make sequence of days to label. Here, 5 days from day 40 to 150
 # at=round(seq(40,150, length=5))
 # axis(1,at=at, labels=doy_2md(at))
+```
 
-
-
-## Function for making figs with metadata. Note: you will want to change figfold and scriptname default values to be appropriate for this document.
-fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
-                   description, #vector of strings, each will be put in its own line of meta file
-                   ##  Note: generating file is defined in the function, date and time is automatically added.
-                   ##default figure info:
-                   width=12,
-                   height=8,
-                   units="in",
-                   res=300,
-                   figfold="5_figs",
-                   scriptname="BCB_analysis_v1.0.Rmd"
-                   ){
-  #function to automate making a jpeg figure (can change code here to make png)
-  #and also add meta text
-  #NOTE: still have to use dev.off() at the end of plot-making
-  
-  ## save meta file
-  cat(c(description,
-      "",##easy way to add an extra line to separate description for basic data.
-      paste("from",scriptname),
-      as.character(Sys.time())),
-    sep="\n",
-    file=here(figfold, paste(filename,"_meta.txt", sep=""))
-    )
-  
-  ## open jpeg device
-  jpeg(file=here(figfold,paste(filename,".jpg", sep="")),
-     width=width, 
-     height=height, 
-     units=units, 
-     res=res)
-}
-## Example usage:
-# fig_starter(filename="testfig", description=c("This figure was made as an example.","We can add endless lines of description."))
-# plot(1:10,1:10, pch=1:10)
-# dev.off()
-## Note: in this case the example will not work for you unless you give it the correct location for "figfold" - the relative file path to the folder for your figures.
-
+```{r color_gradient}
 ## Function for making color gradient in R
-color.gradient <- function(x, colors=viridis(256), colsteps=100) {
+color_gradient <- function(x, colors=viridis(256), colsteps=100) {
   return( colorRampPalette(colors) (colsteps) [ findInterval(x, seq(min(x),max(x), length.out=colsteps)) ] )
 }
 ## Example usage:
 #x=runif(100)
-#plot(x=x, y=1/x, pch=19,col=color.gradient(x),
+#plot(x=x, y=1/x, pch=19,col=color_gradient(x),
 #     cex.lab=1.6, main="Example of color gradient")
 
+```
 
-
+```{r t_col}
 ## function for making semi-transparent colors
 t_col <- function(color, alpha = 1, name = NULL) {
   #	  color = color name
@@ -115,12 +95,12 @@ t_col <- function(color, alpha = 1, name = NULL) {
 #plot(c(1,2),c(1,2),type='l')
 #red.t = t_col(color="red", alpha=.5)
 #draw.circle(x=1.5, y=1.5, radius=.2, col=red.t)
+```
 
-
-
+```{r pair panel functions}
 ## Functions for making pair plots
 panel.hist <- function(x, ...){
-# histogram function
+  # histogram function
   usr <- par("usr"); on.exit(par(usr))
   par(usr = c(usr[1:2], 0, 1.5) )
   h <- hist(x, plot = FALSE, breaks=20)
@@ -161,7 +141,6 @@ panel.cortest = function(x,y,
   if(p<.1){col="black"}
   if(p<.05){col="blue"}
   text(.5, .5, p, cex=cex.cor, col=col)
-
 }
 ## example usage:
 # x=runif(100)
@@ -173,11 +152,13 @@ panel.cortest = function(x,y,
 #     lower.panel=panel.cortest,
 #     diag.panel=panel.hist,
 #     upper.panel=panel.cor)
-
 ## Function for taking a vector of strings in R and displaying it as bullets in Rmarkdown
 ## Note that the chunk needs to be given the argument of results='asis'
+```
+
+``` {r printer}
 printer=function(x){
-## x needs to be a vector of strings.
+  ## x needs to be a vector of strings.
   com=as.character(x)
   com=com[com!=""]
   com=gsub("\n","",com)
@@ -187,9 +168,10 @@ printer=function(x){
 # ```{r results='asis'}
 #    printer(1:3)
 # ```
+```
 
-
-
+```{r fig_starter}
+## Function for making figs with metadata. Note: you will want to change figfold and scriptname default values to be appropriate for this document.
 fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
                      description, #vector of strings, each will be put in its own line of meta file
                      ##  Note: generating file is defined in the function, date and time is automatically added.
@@ -199,7 +181,7 @@ fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
                      units="in",
                      res=300,
                      figfold="5_figs",
-                     scriptname="BCB_analysis_v1.2.Rmd"
+                     scriptname="BCB_analysis_v1.0.Rmd"
 ){
   #function to automate making a jpeg figure (can change code here to make png)
   #and also add meta text
@@ -221,6 +203,15 @@ fig_starter=function(filename, #name of figure file to save as WITHOUT SUFFIX
        units=units, 
        res=res)
 }
+## Example usage:
+# fig_starter(filename="testfig", description=c("This figure was made as an example.","We can add endless lines of description."))
+# plot(1:10,1:10, pch=1:10)
+# dev.off()
+## Note: in this case the example will not work for you unless you give it the correct location for "figfold" - the relative file path to the folder for your figures.
+```
+
+```{r gfig_saver}
+# function for saving ggplot figures and metadata. As fig_starter (which is for base graphics), except that saving ggfigures is inherently cleaner, as you are not feeding commands to an open graphics device
 
 gfig_saver=function(gfig, #object to be saved
                     filename, #name of figure file to save as WITHOUT SUFFIX
@@ -258,3 +249,37 @@ gfig_saver=function(gfig, #object to be saved
 
 
 # [something something main document sections]
+
+Reminder: you can have sub-sections tabs using the `{.tabset}` argument, and can choose which one is on top by default with `{.active}`:
+
+## Example of tabsetting{.tabset}
+
+### Analysis for Site 1
+
+Maybe here we do some analysis on Site 1. Example plot follows
+
+```{r}
+x=runif(30)
+y=x+rnorm(30)
+plot(x,y, main="example plot")
+out=lm(y~x)
+abline(out)
+```
+
+
+
+### Analysis for Site 2
+
+Maybe here we do some analysis on Site 2. A different plot follows
+
+```{r}
+x=runif(30)
+y=3-x+rnorm(30)
+plot(x,y, main="example plot")
+out=lm(y~x)
+abline(out)
+```
+
+### Summary of analyses {.active}
+
+Something something insightful comments.
