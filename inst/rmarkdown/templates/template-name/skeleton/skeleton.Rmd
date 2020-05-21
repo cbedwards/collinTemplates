@@ -32,7 +32,7 @@ set.seed(123)
 
 ## Libraries
 
-```{r}
+```{r libraries, message=FALSE, warning=FALSE}
 library(viridis) #package for colors
 library(here) #package for handling file paths easily
 library(beepr) #package for making sound to let me know things are done. Not important for document compile, but useful for running time-consuming loops or tasks.
